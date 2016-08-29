@@ -12,7 +12,7 @@ Eacirc::Eacirc(const std::string)
     , _num_of_tvs(500)
     , _num_of_epochs(300)
     , _change_frequency(100)
-    , _significance_level(5) {}
+    , _significance_level(1) {}
 
 void Eacirc::run() {
     std::vector<double> pvalues;
