@@ -5,6 +5,7 @@
 #include <core/logger.h>
 #include <limits>
 #include <set>
+#include <cmath>
 
 #ifndef M_PI // to resolve cmath constants problems
 #define M_PI 3.141592653589793238462
@@ -19,7 +20,7 @@ double CommonFnc::chisqr(int Dof, double Cv) {
     double K = ((double)Dof) * 0.5;
     double X = Cv * 0.5;
     if (Dof == 2) {
-        return exp(-1.0 * X);
+        return std::exp(-1.0 * X);
     }
     double gin, gim, gip;
     incog(K, X, gin, gim, gip); // compute incomplete gamma function
@@ -34,7 +35,7 @@ int CommonFnc::incog(double a, double x, double& gin, double& gim, double& gip) 
 
     if ((a < 0.0) || (x < 0))
         return 1;
-    xam = -x + a * log(x);
+    xam = -x + a * std::log(x);
     if ((xam > 700) || (a > 170.0))
         return 1;
     if (x == 0.0) {
@@ -49,10 +50,10 @@ int CommonFnc::incog(double a, double x, double& gin, double& gim, double& gip) 
         for (k = 1; k <= 60; k++) {
             r *= x / (a + k);
             s += r;
-            if (fabs(r / s) < 1e-15)
+            if (std::fabs(r / s) < 1e-15)
                 break;
         }
-        gin = exp(xam) * s;
+        gin = std::exp(xam) * s;
         ga = gamma0(a);
         gip = gin / ga;
         gim = ga - gin;
@@ -61,7 +62,7 @@ int CommonFnc::incog(double a, double x, double& gin, double& gim, double& gip) 
         for (k = 60; k >= 1; k--) {
             t0 = (k - a) / (1.0 + k / (x + t0));
         }
-        gim = exp(xam) / (x + t0);
+        gim = std::exp(xam) / (x + t0);
         ga = gamma0(a);
         gin = ga - gim;
         gip = 1.0 - gim / ga;
@@ -115,7 +116,7 @@ double CommonFnc::gamma0(double x) {
         } else
             ga = 1e308;
     } else {
-        if (fabs(x) > 1.0) {
+        if (std::fabs(x) > 1.0) {
             z = fabs(x);
             m = (int)z;
             r = 1.0;
@@ -130,10 +131,10 @@ double CommonFnc::gamma0(double x) {
             gr = gr * z + g[k];
         }
         ga = 1.0 / (gr * z);
-        if (fabs(x) > 1.0) {
+        if (std::fabs(x) > 1.0) {
             ga *= r;
             if (x < 0.0) {
-                ga = -M_PI / (x * ga * sin(M_PI * x));
+                ga = -M_PI / (x * ga * std::sin(M_PI * x));
             }
         }
     }
@@ -147,7 +148,7 @@ double CommonFnc::KSGetCriticalValue(unsigned long sampleSize, unsigned signific
     }
     switch (significanceLevel) {
     case 10:
-        return 1.224 / sqrt((double)sampleSize);
+        return 1.224 / std::sqrt((double)sampleSize);
     case 5:
         return 1.358 / sqrt((double)sampleSize);
     case 1:
