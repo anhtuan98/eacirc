@@ -27,3 +27,17 @@ script:
   - mkdir -p build && cd build
   - CC=$CC_COMPILER CXX=$CXX_COMPILER cmake .. -DCMAKE_BUILD_TYPE=Debug
   - make
+
+env:
+  global:
+   - secure: "hAYJZlldcmNTRgs+Jduw0nrFeNTeF/3u/TejSMbyIQ0Kd7/o0keTJGKWyCGIgslz1zzC13sePZ7cd54Mcwp//OV8XZSV3aHcjhbbxm+9YZBuewMBg0K9M8fSQh1W9b/bDdy+so1tP//NUwHF8a5YI+iJt0fmrjrOYva3U2bDubk="
+
+addons:
+  coverity_scan:
+    project:
+      name: "crocs-muni/eacirc"
+      description: "Build submitted via Travis CI"
+    notification_email: novotng@gmail.com
+    build_command_prepend: mkdir -p build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Release
+    build_command: make
+branch_pattern: coverity_scan
